@@ -84,5 +84,3 @@ All data is stored in **localStorage**.
 - FontAwesome Icons
 
 ---
-
-## 📂 Project Structure
