@@ -23,15 +23,69 @@ scroll-behavior:smooth;
 body{
 min-height:100vh;
 color:white;
-background:linear-gradient(-45deg,#FF9933,#ffffff,#138808,#0a3d62);
-background-size:400% 400%;
-animation:gradientMove 12s ease infinite;
+overflow-x:hidden;
+background: linear-gradient(120deg, #FF9933, #ffffff, #138808, #0a3d62);
+background-size: 300% 300%;
+animation: gradientShift 15s ease infinite;
+position: relative;
 }
 
-@keyframes gradientMove{
+/* Animated Gradient */
+@keyframes gradientShift{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
+}
+
+/* Floating Glow Blobs */
+.blob{
+position:absolute;
+border-radius:50%;
+filter:blur(120px);
+opacity:0.6;
+animation: float 20s infinite alternate ease-in-out;
+z-index:-1;
+}
+
+.blob1{
+width:400px;
+height:400px;
+background:#FF9933;
+top:10%;
+left:5%;
+}
+
+.blob2{
+width:500px;
+height:500px;
+background:#138808;
+bottom:10%;
+right:10%;
+animation-duration:25s;
+}
+
+.blob3{
+width:300px;
+height:300px;
+background:#0a3d62;
+top:40%;
+left:60%;
+animation-duration:18s;
+}
+
+@keyframes float{
+0%{transform:translateY(0px) translateX(0px);}
+100%{transform:translateY(-60px) translateX(40px);}
+}
+
+/* Particle Canvas */
+#particles{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-2;
 }
 
 /* Navbar */
@@ -48,7 +102,7 @@ z-index:1000;
 }
 
 nav h2{
-color:#fff;
+color:white;
 }
 
 nav ul{
@@ -87,13 +141,13 @@ border-radius:20px;
 backdrop-filter:blur(20px);
 width:100%;
 max-width:600px;
-box-shadow:0 8px 32px rgba(0,0,0,0.2);
+box-shadow:0 8px 32px rgba(0,0,0,0.3);
 margin-top:20px;
 }
 
 /* Hero */
 .hero h1{
-font-size:40px;
+font-size:42px;
 margin-bottom:15px;
 }
 
@@ -101,6 +155,7 @@ margin-bottom:15px;
 margin-bottom:20px;
 }
 
+/* Buttons */
 button{
 padding:12px 25px;
 border:none;
@@ -183,9 +238,15 @@ font-size:28px;
 
 <body>
 
+<canvas id="particles"></canvas>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
 <!-- Navbar -->
 <nav>
-<h2>JanSeva</h2>
+<h2><i class="fa-solid fa-landmark"></i> JanSeva</h2>
 <ul>
 <li><a href="#home">Home</a></li>
 <li><a href="#register">Register</a></li>
@@ -273,12 +334,11 @@ font-size:28px;
 
 <script>
 
-/* Fade In Animation */
+/* Fade In */
 const faders=document.querySelectorAll(".fade");
 window.addEventListener("scroll",()=>{
 faders.forEach(el=>{
-const rect=el.getBoundingClientRect();
-if(rect.top<window.innerHeight-100){
+if(el.getBoundingClientRect().top<window.innerHeight-100){
 el.classList.add("show");
 }
 });
@@ -361,6 +421,44 @@ const complaints=JSON.parse(localStorage.getItem("complaints"))||[];
 complaintCount.innerText=complaints.length;
 }
 updateCounter();
+
+/* Particles */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<60;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+d:Math.random()*1
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,255,255,0.3)";
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+});
+update();
+}
+
+function update(){
+particles.forEach(p=>{
+p.y+=p.d;
+if(p.y>canvas.height){
+p.y=0;
+}
+});
+}
+
+setInterval(draw,30);
 
 </script>
 
