@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JanSeva - Public Grievance Portal</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+scroll-behavior:smooth;
+}
+
+body{
+min-height:100vh;
+color:white;
+background:linear-gradient(-45deg,#FF9933,#ffffff,#138808,#0a3d62);
+background-size:400% 400%;
+animation:gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Navbar */
+nav{
+position:sticky;
+top:0;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(15px);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 8%;
+z-index:1000;
+}
+
+nav h2{
+color:#fff;
+}
+
+nav ul{
+display:flex;
+list-style:none;
+gap:20px;
+}
+
+nav ul li a{
+color:white;
+text-decoration:none;
+font-weight:500;
+transition:0.3s;
+}
+
+nav ul li a:hover{
+color:#FF9933;
+}
+
+/* Sections */
+section{
+padding:100px 10%;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
+/* Glass Card */
+.card{
+background:rgba(255,255,255,0.15);
+padding:40px;
+border-radius:20px;
+backdrop-filter:blur(20px);
+width:100%;
+max-width:600px;
+box-shadow:0 8px 32px rgba(0,0,0,0.2);
+margin-top:20px;
+}
+
+/* Hero */
+.hero h1{
+font-size:40px;
+margin-bottom:15px;
+}
+
+.hero p{
+margin-bottom:20px;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:#0a3d62;
+color:white;
+cursor:pointer;
+transition:0.3s;
+font-weight:600;
+}
+
+button:hover{
+transform:scale(1.05);
+background:#FF9933;
+}
+
+/* Form */
+input, select, textarea{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+outline:none;
+}
+
+textarea{
+resize:none;
+height:100px;
+}
+
+/* Stats */
+.stats{
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+justify-content:center;
+margin-top:30px;
+}
+
+.stat-box{
+background:rgba(255,255,255,0.15);
+padding:20px;
+border-radius:15px;
+width:200px;
+backdrop-filter:blur(15px);
+}
+
+/* Footer */
+footer{
+text-align:center;
+padding:20px;
+background:rgba(0,0,0,0.3);
+}
+
+/* Fade Animation */
+.fade{
+opacity:0;
+transform:translateY(30px);
+transition:1s;
+}
+
+.fade.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* Responsive */
+@media(max-width:768px){
+nav ul{
+flex-direction:column;
+gap:10px;
+}
+.hero h1{
+font-size:28px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav>
+<h2>JanSeva</h2>
+<ul>
+<li><a href="#home">Home</a></li>
+<li><a href="#register">Register</a></li>
+<li><a href="#login">Login</a></li>
+<li><a href="#complaint">Raise Complaint</a></li>
+<li><a href="#track">Track Complaint</a></li>
+</ul>
+</nav>
+
+<!-- Hero -->
+<section id="home" class="hero fade">
+<h1>India’s Centralized Public Grievance Portal</h1>
+<p>Empowering Citizens. Strengthening Governance.</p>
+<button onclick="document.getElementById('complaint').scrollIntoView()">Raise Complaint</button>
+
+<div class="stats">
+<div class="stat-box">
+<h2 id="complaintCount">0</h2>
+<p>Total Complaints</p>
+</div>
+<div class="stat-box">
+<h2>2026</h2>
+<p>Prototype Year</p>
+</div>
+</div>
+</section>
+
+<!-- Register -->
+<section id="register" class="fade">
+<h2>Register</h2>
+<div class="card">
+<input type="text" id="regName" placeholder="Full Name">
+<input type="email" id="regEmail" placeholder="Email">
+<input type="text" id="regPhone" placeholder="Phone">
+<input type="text" id="regAddress" placeholder="Address">
+<input type="password" id="regPassword" placeholder="Password">
+<button onclick="register()">Register</button>
+</div>
+</section>
+
+<!-- Login -->
+<section id="login" class="fade">
+<h2>Login</h2>
+<div class="card">
+<input type="email" id="loginEmail" placeholder="Email">
+<input type="password" id="loginPassword" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="welcomeUser"></p>
+</div>
+</section>
+
+<!-- Raise Complaint -->
+<section id="complaint" class="fade">
+<h2>Raise Complaint</h2>
+<div class="card">
+<select id="category">
+<option>Roads</option>
+<option>Water</option>
+<option>Electricity</option>
+<option>Garbage</option>
+<option>Other</option>
+</select>
+<textarea id="description" placeholder="Description"></textarea>
+<input type="text" id="location" placeholder="Location">
+<input type="file" id="image" accept="image/*">
+<img id="preview" style="width:100%;margin-top:10px;border-radius:10px;">
+<button onclick="submitComplaint()">Submit Complaint</button>
+<p id="complaintID"></p>
+</div>
+</section>
+
+<!-- Track Complaint -->
+<section id="track" class="fade">
+<h2>Track Complaint</h2>
+<div class="card">
+<input type="text" id="trackID" placeholder="Enter Complaint ID">
+<button onclick="trackComplaint()">Search</button>
+<div id="result"></div>
+</div>
+</section>
+
+<footer>
+© 2026 JanSeva – Government of India Initiative (Prototype)
+</footer>
+
+<script>
+
+/* Fade In Animation */
+const faders=document.querySelectorAll(".fade");
+window.addEventListener("scroll",()=>{
+faders.forEach(el=>{
+const rect=el.getBoundingClientRect();
+if(rect.top<window.innerHeight-100){
+el.classList.add("show");
+}
+});
+});
+
+/* Register */
+function register(){
+const user={
+name:regName.value,
+email:regEmail.value,
+phone:regPhone.value,
+address:regAddress.value,
+password:regPassword.value
+};
+localStorage.setItem("user",JSON.stringify(user));
+alert("Registration Successful!");
+document.querySelectorAll("#register input").forEach(i=>i.value="");
+}
+
+/* Login */
+function login(){
+const user=JSON.parse(localStorage.getItem("user"));
+if(user && user.email===loginEmail.value && user.password===loginPassword.value){
+alert("Login Successful!");
+welcomeUser.innerText="Welcome, "+user.name;
+}else{
+alert("Invalid Credentials!");
+}
+}
+
+/* Image Preview */
+image.onchange=function(){
+const reader=new FileReader();
+reader.onload=function(){
+preview.src=reader.result;
+}
+reader.readAsDataURL(this.files[0]);
+}
+
+/* Submit Complaint */
+function submitComplaint(){
+let complaints=JSON.parse(localStorage.getItem("complaints"))||[];
+const id="JS"+Math.floor(Math.random()*100000);
+
+const complaint={
+id:id,
+category:category.value,
+description:description.value,
+location:location.value,
+status:"Pending"
+};
+
+complaints.push(complaint);
+localStorage.setItem("complaints",JSON.stringify(complaints));
+complaintID.innerText="Complaint Submitted! ID: "+id;
+updateCounter();
+}
+
+/* Track Complaint */
+function trackComplaint(){
+const id=trackID.value;
+const complaints=JSON.parse(localStorage.getItem("complaints"))||[];
+const found=complaints.find(c=>c.id===id);
+
+if(found){
+result.innerHTML=`
+<p><b>Category:</b> ${found.category}</p>
+<p><b>Description:</b> ${found.description}</p>
+<p><b>Location:</b> ${found.location}</p>
+<p><b>Status:</b> ${found.status}</p>
+`;
+}else{
+result.innerHTML="<p>Complaint Not Found</p>";
+}
+}
+
+/* Counter */
+function updateCounter(){
+const complaints=JSON.parse(localStorage.getItem("complaints"))||[];
+complaintCount.innerText=complaints.length;
+}
+updateCounter();
+
+</script>
+
+</body>
+</html>
